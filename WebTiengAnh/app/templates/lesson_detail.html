@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ lesson.title }} - English Learning{% endblock %}
+
+{% block content %}
+    <style>
+        /* Your existing CSS styles */
+        .lesson h2 {
+            color: #007bff;
+        }
+        .lesson h3, .quiz h3 {
+            color: #000000;
+        }
+
+        /* Additional CSS for the centered content box */
+        .centered-content {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        .content-box {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .quiz-button a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .quiz-button a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <div class="container">
+        <h1 class="text-center">{{ lesson.title }}</h1>
+        <div class="centered-content">
+            <div class="content-box">
+                {{ lesson.content | safe }}
+            </div>
+        </div>
+        <div class="quiz-button">
+            <a href="{% url 'app:lesson_detail1' lesson.id %}" class="btn btn-primary">Bắt đầu Test</a>
+        </div>
+        <a href="{% url 'app:course_detail' lesson.course.id %}" class="btn btn-secondary">Trở lại khóa học</a>
+    </div>
+{% endblock %}

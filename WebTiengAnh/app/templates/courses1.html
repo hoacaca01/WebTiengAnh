@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses - English Learning{% endblock %}
+
+{% block content %}
+<style>
+    .course-card {
+        border: 1px solid #e2e2e2;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.2s;
+    }
+
+    .course-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .course-image {
+        width: 100%;
+        height: 350px;
+<!--        height: 100%-->
+        object-fit: cover;
+    }
+
+    .course-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .course-description {
+        font-size: 0.875rem;
+        margin-top: 10px;
+    }
+
+    .btn-details {
+        background-color: #007bff;
+        color: #fff;
+        transition: background-color 0.2s;
+    }
+
+    .btn-details:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="container mt-7">
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-md-4 mb-4">
+            <div class="course-card">
+                <img class="course-image" src="{{ course.cover_image.url }}" alt="{{ course.name }}">
+                <div class="card-body">
+                    <h5 class="course-title">{{ course.name }}</h5>
+                    <p class="course-description">{{ course.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'app:course_detail' course.id %}" class="btn btn-details">Chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.name }} - Lessons{% endblock %}
+
+{% block content %}
+    <style>
+        /* Custom CSS styles for lessons page */
+        body {
+            background-color: #f0f0f0;
+        }
+
+        .lesson-card {
+            margin: 10px;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .lesson-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .lesson-title {
+            font-size: 24px;
+            color: #007BFF;
+        }
+
+        .lesson-summary {
+            color: #333;
+        }
+
+        .page-content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+
+    <div class="container mt-5 page-content">
+        <h1 class="text-center">{{ course.name }} - Lessons</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Display lessons as cards -->
+                {% for lesson in lessons %}
+                <div class="col-md-4">
+                    <div class="lesson-card">
+                        <h5 class="lesson-title">{{ lesson.title }}</h5>
+                        <p class="lesson-summary">{{ lesson.summary }}</p>
+                        <a href="{% url 'app:lesson_detail' lesson.id %}" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}

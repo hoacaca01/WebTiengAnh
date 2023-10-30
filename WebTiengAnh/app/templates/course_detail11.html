@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.name }} - English Learning{% endblock %}
+
+{% block content %}
+    <style>
+        /* Custom CSS styles */
+        body {
+            background-color: #f0f0f0; /* Màu nền cho toàn bộ trang */
+        }
+
+        .card {
+            margin: 10px;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 24px;
+            color: #007BFF;
+        }
+
+        .card-summary {
+            color: #333;
+        }
+
+        .page-content {
+            background-color: #ffffff; /* Màu nền cho phần nội dung */
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+
+    <div class="container mt-5 page-content">
+        <h1 class="text-center">{{ course.name }}</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="lessons-tab" data-toggle="tab" href="#lessons" role="tab" aria-controls="lessons" aria-selected="true">Danh Sách Bài Học</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="quizzes-tab" data-toggle="tab" href="#quizzes" role="tab" aria-controls="quizzes" aria-selected="false">Danh Sách Bài Kiểm Tra Cả Khóa</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="lessons" role="tabpanel" aria-labelledby="lessons-tab">
+                        <div class="row">
+                            <!-- Display lessons as cards -->
+                            {% for lesson in lessons %}
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <h5 class="card-title">{{ lesson.title }}</h5>
+                                    <p class="card-summary">{{ lesson.summary }}</p>
+                                    <a href="{% url 'app:lesson_detail' lesson.id %}" class="btn btn-primary">Xem chi tiết</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="quizzes" role="tabpanel" aria-labelledby="quizzes-tab">
+                        <div class="row">
+                            <!-- Display quizzes as cards -->
+                            {% for quiz in quizzes %}
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <h5 class="card-title">{{ quiz.title }}</h5>
+                                    <a href="{% url 'app:quiz_detail' quiz.id %}" class="btn btn-primary">Vào kiểm tra</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}

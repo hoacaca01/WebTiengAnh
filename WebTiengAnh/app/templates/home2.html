@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa học</title>
+    <!-- Sử dụng Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Tùy chỉnh ảnh */
+        .card-img-top {
+            border-radius: 10px; /* Bo tròn góc ảnh */
+            width: 300px; /* Chiều rộng ảnh */
+            height: 150px; /* Chiều cao ảnh */
+            object-fit: cover; /* Đảm bảo ảnh không bị méo */
+        }
+
+        /* Tùy chỉnh card */
+        .card {
+            border: none; /* Bỏ đường viền */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Trang chủ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Khóa học miễn phí</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Khóa học Pro</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tin tức</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Liên hệ</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Nội dung trang web -->
+    <div class="container mt-5">
+        <!-- Danh mục Khóa học miễn phí -->
+        <h2 class="mb-4">Khóa học miễn phí</h2>
+        <div class="row">
+            {% for course in courses %}
+                <!-- Khóa học 1 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ course.cover_image.url }}" alt="{{ course.name }}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ course.name }}</h5>
+                            <p class="card-text">{{ course.description }}</p>
+                            <a href="{% url 'app:course_detail' course.id %}" class="btn btn-primary">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+<!--            &lt;!&ndash; Khóa học 1 &ndash;&gt;-->
+<!--            <div class="col-md-4 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://placehold.it/300x200" alt="Khóa học 1" class="card-img-top">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">Khóa học 1</h5>-->
+<!--                        <p class="card-text">Mô tả khóa học 1.</p>-->
+<!--                        <a href="#" class="btn btn-primary">Xem chi tiết</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Khóa học 2 &ndash;&gt;-->
+<!--            <div class="col-md-4 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://placehold.it/300x200" alt="Khóa học 2" class="card-img-top">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">Khóa học 2</h5>-->
+<!--                        <p class="card-text">Mô tả khóa học 2.</p>-->
+<!--                        <a href="#" class="btn btn-primary">Xem chi tiết</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Khóa học 3 &ndash;&gt;-->
+<!--            <div class="col-md-4 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://placehold.it/300x200" alt="Khóa học 3" class="card-img-top">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">Khóa học 3</h5>-->
+<!--                        <p class="card-text">Mô tả khóa học 3.</p>-->
+<!--                        <a href="#" class="btn btn-primary">Xem chi tiết</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Thêm 4 khóa học khác ở đây &ndash;&gt;-->
+<!--        </div>-->
+
+        <!-- Danh mục Khóa học Pro -->
+        <h2 class="mt-5 mb-4">Khóa học Pro</h2>
+        <div class="row">
+            <!-- Khóa học 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://placehold.it/300x200" alt="Khóa học Pro 1" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Khóa học Pro 1</h5>
+                        <p class="card-text">Mô tả khóa học Pro 1.</p>
+                        <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Khóa học 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://placehold.it/300x200" alt="Khóa học 1" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Khóa học 1</h5>
+                        <p class="card-text">Mô tả khóa học 1.</p>
+                        <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Khóa học 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://placehold.it/300x200" alt="Khóa học 2" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Khóa học 2</h5>
+                        <p class="card-text">Mô tả khóa học 2.</p>
+                        <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Khóa học 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://placehold.it/300x200" alt="Khóa học 3" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Khóa học 3</h5>
+                        <p class="card-text">Mô tả khóa học 3.</p>
+                        <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Thêm 4 khóa học Pro khác ở đây -->
+        </div>
+         <!-- Danh mục Khóa học Pro1 -->
+        <h2 class="mt-5 mb-4">Khóa học Pro1</h2>
+        <div class="row">
+            <!-- Khóa học 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://placehold.it/300x200" alt="Khóa học Pro 1" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Khóa học Pro 1</h5>
+                        <p class="card-text">Mô tả khóa học Pro 1.</p>
+                        <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Khóa học 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://placehold.it/300x200" alt="Khóa học 1" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Khóa học 1</h5>
+                        <p class="card-text">Mô tả khóa học 1.</p>
+                        <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Khóa học 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://placehold.it/300x200" alt="Khóa học 2" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Khóa học 2</h5>
+                        <p class="card-text">Mô tả khóa học 2.</p>
+                        <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Khóa học 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://placehold.it/300x200" alt="Khóa học 3" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Khóa học 3</h5>
+                        <p class="card-text">Mô tả khóa học 3.</p>
+                        <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Thêm 4 khóa học Pro khác ở đây -->
+        </div>
+    </div>
+    <!-- Phần footer -->
+    <footer class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Liên hệ</h5>
+                    <p>Địa chỉ: Đường ABC, TP XYZ</p>
+                    <p>Email: contact@example.com</p>
+                    <p>Điện thoại: +123456789</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Liên kết nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Trang chủ</a></li>
+                        <li><a href="#">Khóa học miễn phí</a></li>
+                        <li><a href="#">Khóa học Pro</a></li>
+                        <li><a href="#">Tin tức</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Theo dõi chúng tôi</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fab fa-linkedin-in"></i> LinkedIn</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Sử dụng Bootstrap JS và Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

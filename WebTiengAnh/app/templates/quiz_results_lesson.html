@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2 class="text-center mb-4">Kết quả bài Test</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <ul class="list-group">
+          {% for quiz_result_lesson in quiz_results_lesson %}
+            <li class="list-group-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="mb-0"><strong>{{ quiz_result_lesson.quiz_lesson.title }}</strong></h4>
+                  <small class="text-muted">Ngày thi: {{ quiz_result_lesson.completion_date }}</small>
+                </div>
+                <span class="badge badge-primary badge-pill">{{ quiz_result_lesson.score }} Điểm</span>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+        <div class="text-center mt-4">
+          <a href="{% url 'app:home' %}" class="btn btn-primary">Quay lại trang chủ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ quiz_lesson.title }} - English Learning{% endblock %}
+
+{% block content %}
+<style>
+    /* Tùy chỉnh giao diện cho trang thi trắc nghiệm */
+    .quiz-container {
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .quiz-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 20px;
+        border-radius: 10px 10px 10px 10px;
+        text-align: center;
+    }
+
+    .quiz-header h1 {
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .question-container {
+        background-color: #fff;
+        border-radius: 0 0 10px 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .question-header {
+        background-color: #000;
+        color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .question-header p {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .answer-options {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .answer {
+        background-color: #f8f9fa;
+        color: #000;
+        padding: 10px;
+        margin: 5px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .answer label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .user-info {
+        background-color: #3498db;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #fff;
+    }
+
+    .timer {
+        background-color: #e74c3c;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        color: #fff;
+    }
+
+    .timer #timer {
+        font-size: 24px;
+        margin-top: 10px;
+    }
+
+    .btn-custom {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-custom:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <h1>{{ quiz_lesson.title }}</h1>
+                </div>
+                <form id="quizForm" method="post" action="{% url 'app:submit_quiz' quiz.id %}">
+                    {% csrf_token %}
+                    <div class="question-container">
+                        {% for question_lesson in questions_lesson %}
+                        <div class="question" id="question_{{ question.id }}" {% if forloop.counter > 1 %}style="display: none;"{% endif %}>
+                            <div class="question-header">
+                                <p><strong>Câu hỏi {{ forloop.counter }}/{{ questions_lesson|length }}:</strong> {{ question_lesson.text }}</p>
+                            </div>
+                            <div class="answer-options">
+                                <div class="row">
+                                    {% for answer_lesson in question_lesson.answer_lesson_set.all %}
+                                    <div class="col-md-6">
+                                        <div class="answer">
+                                            <label>
+                                                <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}"> {{ answer_lesson.text }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {% if forloop.counter|divisibleby:2 and not forloop.last %}
+                                    </div>
+                                    <div class="row">
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="button" id="nextButton" class="btn btn-custom">Tiếp theo</button>
+                        <button type="submit" id="submitButton" class="btn btn-custom" style="display: none;">Nộp bài</button>
+                    </div>
+                </form>
+                <a href="{% url 'app:course_detail' quiz.course.id %}" class="btn btn-secondary mt-3">Quay lại Khóa học</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="user-info">
+                <p class="username">Xin chào, {{ user.username }}</p>
+            </div>
+            <div class="timer">
+                <div id="timer" class="mt-3">Thời gian còn lại: 02:00</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    let timeRemaining = 120; // 20 phút = 20*60 giây
+
+    function showQuestion(questionNumber) {
+        const questions = document.querySelectorAll('.question');
+        questions.forEach((question, index) => {
+            if (index + 1 === questionNumber) {
+                question.style.display = 'block';
+            } else {
+                question.style.display = 'none';
+            }
+        });
+    }
+
+    function updateTimer() {
+        const timerElement = document.getElementById('timer');
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        timerElement.textContent = `Thời gian còn lại: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeRemaining === 0) {
+            alert("Hết thời gian!");
+            submitAnswers();
+            window.close(); // Tự đóng trang sau khi kết thúc thời gian
+        } else {
+            timeRemaining--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+
+    function submitAnswers() {
+        document.getElementById('quizForm').submit();
+    }
+
+    const nextButton = document.getElementById('nextButton');
+    const submitButton = document.getElementById('submitButton');
+    nextButton.addEventListener('click', function () {
+        if (currentQuestion < {{ questions|length }}) {
+            currentQuestion++;
+            showQuestion(currentQuestion);
+        }
+        if (currentQuestion === {{ questions|length }}) {
+            nextButton.style.display = 'none';
+            submitButton.style.display = 'block';
+        }
+    });
+
+    updateTimer(); // Bắt đầu đếm ngược
+    showQuestion(currentQuestion);
+</script>
+{% endblock %}

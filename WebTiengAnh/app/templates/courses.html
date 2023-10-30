@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses - English Learning{% endblock %}
+
+{% block content %}
+    <style>
+        .custom-card {
+            overflow: hidden; /* Loại bỏ phần thừa của hình ảnh */
+        }
+
+        .custom-image {
+            width: 100%; /* Hình ảnh chiếm toàn bộ chiều rộng của khung card */
+            height: 300px; /* Giữ tỷ lệ khung hình ảnh */
+        }
+    </style>
+<!--    <h1>Danh Sách Các Khóa Học</h1>-->
+    <div class="row">
+        {% for course in courses %}
+            <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                    <img class="card-img-top custom-image" src="{{ course.cover_image.url }}" alt="{{ course.name }}">
+                    <div class="card-body">
+                        <p class="card-text">{{ course.description }}</p>
+                        <h5 class="card-title">{{ course.name }}</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="{% url 'app:course_detail' course.id %}" class="btn btn-sm btn-outline-secondary">Chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+

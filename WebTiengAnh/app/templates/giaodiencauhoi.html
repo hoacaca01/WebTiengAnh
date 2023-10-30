@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ quiz.title }} - English Learning{% endblock %}
+
+{% block content %}
+<style>
+    .user-info {
+    background-color: #3498db;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff;
+}
+.black-box {
+    background-color: #000;
+    padding: 10px;
+    border-radius: 5px;
+}
+.user-info-inner {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.username {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.timer {
+    background-color: #e74c3c;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    color: #fff;
+}
+
+.timer #timer {
+    font-size: 24px;
+    margin-top: 10px;
+}
+.black-box {
+    background-color: #000;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.question-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.question-header {
+    background-color: #000;
+    color: #fff;
+    padding: 50px;
+    border-radius: 10px 10px 10px 10px;
+    text-align: center;
+}
+
+.question ul {
+    padding-left: 20px;
+}
+
+.question label {
+    display: block;
+    margin-bottom: 10px;
+}
+.answer-options {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.answer {
+    background-color: #fff;
+    color: #000;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.answer label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Để thay đổi màu chữ cho các lựa chọn radio button */
+.answer input[type="radio"] {
+    color: #000;
+}
+
+/* Để thay đổi màu chữ cho nội dung đáp án */
+.answer label span {
+    color: #000;
+}
+
+</style>
+<!--<div class="container mt-5", style="background-image: url('/static/dhqb.jpg'); /* Đường dẫn đến hình ảnh của bạn */-->
+<!--            background-size: cover; /* Kéo dãn hình ảnh để nó phủ kín cửa sổ trình duyệt */-->
+<!--            background-repeat: no-repeat; /* Ngăn lặp lại hình ảnh */-->
+<!--            background-attachment: fixed; /* Giữ hình ảnh ở vị trí cố định khi cuộn trang */-->
+<!--            background-position: center; /* Canh giữa hình ảnh */-->
+<!--            color: #fff; /* Màu chữ cho nội dung trên hình nền */-->
+<!--            ">-->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h1 class="text-center mb-4">{{ quiz.title }}</h1>
+            <form id="quizForm" method="post" action="{% url 'app:submit_quiz' quiz.id %}">
+                {% csrf_token %}
+                <div class="container mt-5">
+                    <div class="col-md-12">
+                        <div class="question-container">
+                            {% for question in questions %}
+                            <div class="question" id="question_{{ question.id }}" {% if forloop.counter > 1 %}style="display: none;"{% endif %}>
+                                <div class="question-header">
+                                    <p class="mb-0"><strong>Câu hỏi {{ forloop.counter }}/{{ questions|length }}:</strong> {{ question.text }}</p>
+                                </div>
+<!--                                <ul class="list-unstyled">-->
+<!--                                    {% for answer in question.answer_set.all %}-->
+<!--                                    <li>-->
+<!--                                        <label>-->
+<!--                                            <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}"> {{ answer.text }}-->
+<!--                                        </label>-->
+<!--                                    </li>-->
+<!--                                    {% endfor %}-->
+<!--                                </ul>-->
+                                <div class="answer-options">
+                                    <div class="row">
+                                        {% for answer in question.answer_set.all %}
+                                        <div class="col-md-6">
+                                            <div class="answer">
+                                                <label>
+                                                    <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}"> {{ answer.text }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% if forloop.counter|divisibleby:2 and not forloop.last %}
+                                        </div>
+                                        <div class="row">
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="button" id="nextButton" class="btn btn-primary">Next</button>
+                        <button type="submit" id="submitButton" class="btn btn-primary" style="display: none;">Submit</button>
+                    </div>
+                </div>
+            </form>
+            <a href="{% url 'app:course_detail' quiz.course.id %}" class="btn btn-secondary mt-3">Back to Course</a>
+<!--            <div id="timer" class="mt-3">Thời gian còn lại: 2:00</div>-->
+        </div>
+        <div class="col-md-4">
+            <div class="black-box">
+                <div class="user-info">
+                    <div class="user-info-inner">
+                        <p class="username">Xin chào, {{ user.username }}</p>
+                    </div>
+                </div>
+                <div class="timer">
+                    <div id="timer" class="mt-3">Thời gian còn lại: 20:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    let timeRemaining = 1200; // 20 phút = 20*60 giây
+
+    function showQuestion(questionNumber) {
+        const questions = document.querySelectorAll('.question');
+        questions.forEach((question, index) => {
+            if (index + 1 === questionNumber) {
+                question.style.display = 'block';
+            } else {
+                question.style.display = 'none';
+            }
+        });
+    }
+
+    function updateTimer() {
+        const timerElement = document.getElementById('timer');
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        timerElement.textContent = `Thời gian còn lại: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeRemaining === 0) {
+            alert("Hết thời gian!");
+            submitAnswers();
+            window.close(); // Tự đóng trang sau khi kết thúc thời gian
+        } else {
+            timeRemaining--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+
+    function submitAnswers() {
+        document.getElementById('quizForm').submit();
+    }
+
+    const nextButton = document.getElementById('nextButton');
+    const submitButton = document.getElementById('submitButton');
+    nextButton.addEventListener('click', function () {
+        if (currentQuestion < {{ questions|length }}) {
+            currentQuestion++;
+            showQuestion(currentQuestion);
+        }
+        if (currentQuestion === {{ questions|length }}) {
+            nextButton.style.display = 'none';
+            submitButton.style.display = 'block';
+        }
+    });
+
+    updateTimer(); // Bắt đầu đếm ngược
+    showQuestion(currentQuestion);
+</script>
+{% endblock %}

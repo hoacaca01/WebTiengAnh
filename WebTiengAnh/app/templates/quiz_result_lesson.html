@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz Result - English Learning{% endblock %}
+
+{% block content %}
+    <style>
+        /* Tùy chỉnh giao diện cho trang kết quả bài thi */
+        .quiz-result-container {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-result-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .quiz-result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .quiz-result-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .quiz-result-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .quiz-result-link {
+            display: inline-block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .quiz-result-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <div class="quiz-result-container">
+        <h1>Quiz Result Lesson</h1>
+        <table class="quiz-result-table">
+            <tr>
+                <td>Điểm Bài Thi</td>
+                <td>{{ quiz_result_lesson.score }}</td>
+            </tr>
+            <tr>
+                <td>{% if quiz_result_lesson.user %}Người Dùng:{% else %}Người dùng Khách{% endif %}</td>
+                <td>{{ quiz_result_lesson.user }}</td>
+            </tr>
+        </table>
+<!--        <a class="quiz-result-link" href="{% url 'app:quiz_detail_lesson' quiz_result_lesson.quiz_lesson.id %}">Trở lại Bài Thi</a>-->
+    </div>
+{% endblock %}
